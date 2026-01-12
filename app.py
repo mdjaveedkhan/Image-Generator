@@ -9,7 +9,6 @@ app = Flask(__name__)
 
 # --- CONFIGURATION ---
 # Replace with your actual Hugging Face token
-HF_TOKEN = "oT2qYnM-2kFHot-9bcf0a12bc95c583-PDX" 
 MODEL_ID = "segmind/tiny-sd"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
