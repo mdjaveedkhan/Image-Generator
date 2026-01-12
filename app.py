@@ -21,6 +21,7 @@ pipe = StableDiffusionPipeline.from_pretrained(
     use_auth_token=HF_TOKEN
 )
 pipe.to(DEVICE)
+pipe.enable_attention_slicing()
 
 @app.route('/')
 def index():
