@@ -9,8 +9,8 @@ app = Flask(__name__)
 
 # --- CONFIGURATION ---
 # Replace with your actual Hugging Face token
-HF_TOKEN = "YOUR_HF_TOKEN_HERE" 
-MODEL_ID = "CompVis/stable-diffusion-v1-4"
+HF_TOKEN = "oT2qYnM-2kFHot-9bcf0a12bc95c583-PDX" 
+MODEL_ID = "segmind/tiny-sd"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 # Load the model once when the server starts
@@ -47,4 +47,7 @@ def generate():
     return jsonify({"image": img_str})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    # Render provides a $PORT environment variable. We must use it!
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
