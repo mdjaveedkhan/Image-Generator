@@ -1,16 +1,26 @@
-# Read the doc: https://huggingface.co/docs/hub/spaces-sdks-docker
-# you will also find guides on how best to write your Dockerfile
+# Use Python 3.10
+FROM python:3.10-slim
 
-FROM python:3.9
-
-RUN useradd -m -u 1000 user
-USER user
-ENV PATH="/home/user/.local/bin:$PATH"
-
+# Set up a home for our app
 WORKDIR /app
 
-COPY --chown=user ./requirements.txt requirements.txt
-RUN pip install --no-cache-dir --upgrade -r requirements.txt
+# Install system dependencies for images
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY --chown=user . /app
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "7860"]
+# Copy requirements and install
+COPY requirements.txt .
+# We use the CPU version of torch to save space on the free tier
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy your code
+COPY . .
+
+# Hugging Face Spaces run on port 7860
+EXPOSE 7860
+
+# Start the app
+CMD ["gunicorn", "--bind", "0.0.0.0:7860", "app:app"]
