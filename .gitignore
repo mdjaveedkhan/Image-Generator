@@ -1,0 +1,12 @@
+# Python environment
+venv/
+__pycache__/
+*.pyc
+
+# Sensitive Info
+.env
+generated_output.png
+
+# OS files
+.DS_Store
+Thumbs.db

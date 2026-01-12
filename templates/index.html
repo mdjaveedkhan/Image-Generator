@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Generator</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background: #121212; color: white; padding-top: 50px; }
+        input { padding: 10px; width: 300px; border-radius: 5px; border: none; }
+        button { padding: 10px 20px; background: #6200ee; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        #result { margin-top: 20px; }
+        img { max-width: 90%; border: 5px solid #333; border-radius: 10px; }
+        .loading { display: none; color: #bb86fc; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>✨ AI Image Magic ✨</h1>
+    <p>Type something and watch the AI draw it!</p>
+
+    <input type="text" id="prompt" placeholder="Describe your image...">
+    <button onclick="generateImage()">Generate</button>
+
+    <div id="loading" class="loading">The AI is thinking... (this takes a minute)</div>
+    <div id="result"></div>
+
+    <script>
+        async function generateImage() {
+            const prompt = document.getElementById('prompt').value;
+            const loading = document.getElementById('loading');
+            const resultDiv = document.getElementById('result');
+
+            loading.style.display = 'block';
+            resultDiv.innerHTML = '';
+
+            const response = await fetch('/generate', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({prompt: prompt})
+            });
+
+            const data = await response.json();
+            loading.style.display = 'none';
+            resultDiv.innerHTML = `<img src="data:image/png;base64,${data.image}" />`;
+        }
+    </script>
+</body>
+</html>
