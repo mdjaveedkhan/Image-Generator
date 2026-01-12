@@ -17,8 +17,7 @@ print(f"Starting server on {DEVICE}...")
 pipe = StableDiffusionPipeline.from_pretrained(
     MODEL_ID, 
     revision="fp16" if DEVICE == "cuda" else "main", 
-    torch_dtype=torch.float16 if DEVICE == "cuda" else torch.float32,
-    use_auth_token=HF_TOKEN
+    torch_dtype=torch.float16 if DEVICE == "cuda" else torch.float32
 )
 pipe.to(DEVICE)
 pipe.enable_attention_slicing()
